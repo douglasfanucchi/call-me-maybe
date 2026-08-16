@@ -20,6 +20,9 @@ install:
 	uv venv
 	uv sync --no-dev
 
+run:
+	@uv run python -m src
+
 clean:
 	@$(foreach dir, $(CACHE_DIRS), find src -depth -name "$(dir)" -exec rm -rf {} \; ;)
 
