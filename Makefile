@@ -1,7 +1,6 @@
 VENV=.venv
 DEPENDENCIES_FILE=requirements.txt
 CACHE_DIRS:=__pycache__ .mypy_cache
-CACHE_DIRS:=$(CACHE_DIRS) $(addprefix */**/, $(CACHE_DIRS))
 MYPY=$(VENV)/bin/mypy
 FLAKE8=$(VENV)/bin/flake8
 MYPY_FLAGS=--warn-return-any --warn-unused-ignores \
@@ -22,7 +21,7 @@ install:
 	uv sync --no-dev
 
 clean:
-	@rm -rf $(CACHE_DIRS)
+	@$(foreach dir, $(CACHE_DIRS), find src -depth -name "$(dir)" -exec rm -rf {} \; ;)
 
 lint: $(MYPY) $(FLAKE8)
 	@uv run flake8 --exclude $(VENV) .
