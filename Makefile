@@ -11,27 +11,23 @@ MYPY_FLAGS=--warn-return-any --warn-unused-ignores \
 lint-strict: MYPY_FLAGS:=$(MYPY_FLAGS) --strict
 
 $(MYPY):
-	make install
+	uv sync
 
 $(FLAKE8):
-	make install
+	uv sync
 
 install:
-	rm -rf $(VENV) &&\
-	python3 -m venv $(VENV) &&\
-	source $(VENV)/bin/activate &&\
-	python3 -m pip install uv && \
-	uv pip install pydantic flake8 mypy
+	rm -rf $(VENV)
+	uv venv
+	uv sync --no-dev
 
 clean:
 	@rm -rf $(CACHE_DIRS)
 
 lint: $(MYPY) $(FLAKE8)
-	@source $(VENV)/bin/activate &&\
-	python3 -m flake8 --exclude $(VENV) . &&\
-	python3 -m mypy $(MYPY_FLAGS) .
+	@uv run flake8 --exclude $(VENV) .
+	@uv run mypy $(MYPY_FLAGS) .
 
 lint-strict: $(MYPY) $(FLAKE8)
-	@source $(VENV)/bin/activate &&\
-	python3 -m flake8 --exclude $(VENV) . &&\
-	python3 -m mypy $(MYPY_FLAGS) .
+	@uv run flake8 --exclude $(VENV) .
+	@uv run mypy $(MYPY_FLAGS) .
