@@ -170,4 +170,25 @@ for input in raw_inputs:
     _function = next(
         filter(lambda item: item["name"] == function_name, functions)
     )
-    prompt = f"Given the function {_function["name"]} "
+    parameters = str({
+        key: _function["parameters"][key]["type"] for key in _function["parameters"]
+    }).replace("'", "")
+    sys.stdout.write(parameters)
+    sys.stdout.write("\n")
+    prompt = f'Given the function {_function["name"]} '
+    prompt += f'which has the following parameters: {parameters}, create a '
+    prompt += f'JSON with formatted inputs where the input values '
+    prompt += f'will be extracted from the following prompt: "{input}"\n'
+    prompt += 'Formatted inputs: {"'
+    sys.stdout.write(prompt)
+    sys.stdout.flush()
+    for i in range(50):
+        token_ids = model.encode(prompt)
+        logits = np.array(
+            model.get_logits_from_input_ids(token_ids.tolist()[0])
+        )
+        best_token_id = np.argmax(logits)
+        decoded_token = model.decode(best_token_id)
+        prompt += decoded_token
+        sys.stdout.write(decoded_token)
+        sys.stdout.flush()
