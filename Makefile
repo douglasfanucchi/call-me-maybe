@@ -25,5 +25,5 @@ lint:
 	@mypy $(MYPY_FLAGS) .
 
 lint-strict:
-	@flake8
+	@flake8 --exclude .venv
 	@mypy $(MYPY_FLAGS) --strict .
