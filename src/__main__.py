@@ -5,11 +5,11 @@ from pathlib import Path
 args = parse_args()
 
 function = FunctionsModel.model_validate_json(
-	Path(args["functions_definition"]).read_text()
+    Path(args["functions_definition"]).read_text()
 )
 
 prompts = PromptsModel.model_validate_json(
-	Path(args["input"]).read_text()
+    Path(args["input"]).read_text()
 )
 
 print(function.root[0].name)

@@ -2,6 +2,8 @@ from pydantic import BaseModel, RootModel
 
 
 class PromptModel(BaseModel):
-	prompt: str
+    prompt: str
 
-class PromptsModel(RootModel[list[PromptModel]]): ...
+
+class PromptsModel(RootModel[list[PromptModel]]):
+    ...
