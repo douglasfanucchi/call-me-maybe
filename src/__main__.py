@@ -4,12 +4,13 @@ from pathlib import Path
 
 args = parse_args()
 
-function = FunctionsModel.model_validate_json(
-    Path(args["functions_definition"]).read_text()
-)
+try:
+    functions = FunctionsModel.model_validate_json(
+        Path(args["functions_definition"]).read_text()
+    )
 
-prompts = PromptsModel.model_validate_json(
-    Path(args["input"]).read_text()
-)
-
-print(function.root[0].name)
+    prompts = PromptsModel.model_validate_json(
+        Path(args["input"]).read_text()
+    )
+except Exception as e:
+    print(f"Error: {e}")
