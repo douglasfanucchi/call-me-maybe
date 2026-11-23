@@ -5,7 +5,17 @@ FUNCTIONS_DEFINITION=data/input/functions_definition.json
 INPUT=data/input/function_calling_tests.json
 OUTPUT=data/output/function_calls.json
 
-install:
+USERNAME ?= $(shell whoami)
+SGOINFRE_DIR=/home/$(USERNAME)/sgoinfre/call-me-maybe
+export HF_HOME=$(SGOINFRE_DIR)/huggingface
+export UV_PROJECT_ENVIRONMENT=$(SGOINFRE_DIR)/.venv
+export UV_CACHE_DIR=$(SGOINFRE_DIR)/uv-cache
+
+sgoinfre:
+	@mkdir -p $(HF_HOME) $(UV_CACHE_DIR)
+	@uv venv --allow-existing $(UV_PROJECT_ENVIRONMENT)
+
+install: sgoinfre
 	@uv sync
 
 run: install
