@@ -20,9 +20,9 @@ install: sgoinfre
 
 run: install
 	@uv run python3 -m src\
-		--functions_definition $(FUNCTIONS_DEFINITION)\
-		--input $(INPUT)\
-		--output $(OUTPUT)
+		-functions_definition $(FUNCTIONS_DEFINITION)\
+		-input $(INPUT)\
+		-output $(OUTPUT)
 
 debug: install
 	@uv run python3 -m pdb src/__main__.py
