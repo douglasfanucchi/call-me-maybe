@@ -31,9 +31,9 @@ clean:
 	@find . \( -name "*__pycache__*" -o -name "*.mypy_cache*" \) -exec rm -rf {} +;
 
 lint:
-	@flake8 --exclude .venv
-	@mypy $(MYPY_FLAGS) .
+	@flake8 --exclude .venv,llm_sdk
+	@mypy $(MYPY_FLAGS) . --exclude llm_sdk/__init__.py
 
 lint-strict:
-	@flake8 --exclude .venv
-	@mypy $(MYPY_FLAGS) --strict .
+	@flake8 --exclude .venv,llm_sdk
+	@mypy $(MYPY_FLAGS) --strict . --exclude llm_sdk/__init__.py

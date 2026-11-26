@@ -5,7 +5,6 @@ from llm_sdk import Small_LLM_Model
 from .function_name_detection import FunctionNameDetection
 from .params_detection import ParamsDetection
 import sys
-from pathlib import Path
 import json
 
 try:
@@ -34,7 +33,9 @@ try:
                 file=sys.stderr
             )
             continue
-        func = next(filter(lambda func: func.name == function_name, functions.root))
+        func = next(filter(
+            lambda func: func.name == function_name, functions.root)
+        )
         params = ParamsDetection(
             llm=llm,
             function=func

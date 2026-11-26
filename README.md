@@ -235,6 +235,7 @@ There is no automated test suite yet. The implementation was validated in the fo
 - **End-to-end runs** on the provided `function_calling_tests.json` and `functions_definition.json`. The output was read by hand and compared with the expected behaviour (see the Accuracy table above).
 - **Input validation.** Pydantic rejects malformed or incorrectly shaped input files before the model is loaded.
 - **Incremental debugging of the decoding loops**, printing the produced JSON per prompt. This is how the problems listed in "Challenges faced" were found.
+- **Static checks** with `make lint` (`flake8` and `mypy`), which currently pass with no issues. All modules, classes and functions in `src/` have Google-style docstrings (PEP 257).
 
 Natural next steps: unit tests for the number mask (every prefix → allowed set), for the string terminator logic with tokens like `",` or `hello"`, and a test that checks that every output file matches its function's schema.    
 

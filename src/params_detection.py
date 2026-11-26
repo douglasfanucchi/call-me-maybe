@@ -1,17 +1,17 @@
 from pydantic import BaseModel, InstanceOf
+from typing import Any
 from llm_sdk import Small_LLM_Model
 from .models import FunctionModel, TypeModel
 import numpy as np
 import json
 import regex
-import math
 
 
 class ParamsDetection(BaseModel):
     llm: InstanceOf[Small_LLM_Model]
     function: FunctionModel
 
-    def model_post_init(self, _):
+    def model_post_init(self, _: Any) -> None:
         self._system_message = (
             "<|im_start|>system\n"
             "You extract information from a sentence and "
@@ -67,7 +67,7 @@ class ParamsDetection(BaseModel):
             output_ids = output_ids + json_value_tokens_ids
             items += 1
         output_ids.append(vocab["}"])
-        return self.llm.decode(output_ids)
+        return str(self.llm.decode(output_ids))
 
     def generate_json_string_value(self, input_ids: list[int]) -> list[int]:
         input_ids = list(input_ids)
@@ -87,11 +87,17 @@ class ParamsDetection(BaseModel):
             input_ids.append(next_token_id)
             token_count += 1
         return output_ids
-    
-    def generate_json_number_value(self, input_ids: list[int], vocab) -> list[int]:
+
+    def generate_json_number_value(
+        self,
+        input_ids: list[int],
+        vocab: dict[str, int]
+    ) -> list[int]:
         input_ids = list(input_ids)
         output_ids: list[int] = []
-        digit_ids = {i for t, i in vocab.items() if regex.fullmatch(r"[0-9]+", t)}
+        digit_ids = {
+            i for t, i in vocab.items() if regex.fullmatch(r"[0-9]+", t)
+        }
         minus, dot = vocab["-"], vocab["."]
         terminators = {vocab[","], vocab["}"]}
         has_digit = has_dot = False

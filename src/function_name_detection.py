@@ -2,13 +2,14 @@ from llm_sdk import Small_LLM_Model
 from .models import FunctionsModel
 import numpy as np
 from pydantic import BaseModel, InstanceOf
+from typing import Any
 
 
 class FunctionNameDetection(BaseModel):
     llm: InstanceOf[Small_LLM_Model]
     functions: FunctionsModel
 
-    def model_post_init(self, _):
+    def model_post_init(self, _: Any) -> None:
         self._functions_descriptions: dict[str, str] = {
             func.name: func.description for func in self.functions.root
         }
@@ -51,4 +52,4 @@ class FunctionNameDetection(BaseModel):
         result = self.llm.decode(output_ids)
         if result not in self._functions_descriptions.keys():
             return None
-        return result
+        return str(result)
