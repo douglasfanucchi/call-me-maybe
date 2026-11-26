@@ -1,3 +1,13 @@
+"""Entry point: turn prompts into function calls.
+
+Run with ``python -m src``. For every prompt of the input file, the
+program picks the best function, extracts its arguments with constrained
+decoding and writes all the results to the output file as JSON.
+
+Prompts for which no function is found are reported on ``stderr`` and
+skipped. Any other error is printed and nothing is written.
+"""
+
 from .cli import parse_args
 from .models import FunctionsModel, PromptsModel
 from pathlib import Path
